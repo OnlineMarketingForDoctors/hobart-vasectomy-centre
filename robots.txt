@@ -1,0 +1,19 @@
+# Hobart Vasectomy Centre
+#
+# This site is intentionally kept OUT of all search engine indexes.
+#
+# Crawling is deliberately ALLOWED below. This is not an oversight.
+# De-indexing is enforced by the noindex directives served on every response:
+#   - <meta name="robots" content="noindex, ..."> in the head of every page
+#   - X-Robots-Tag: noindex, ... HTTP header (see vercel.json)
+#
+# A crawler that is blocked by robots.txt never fetches the page, and so never
+# sees those directives. Blocking crawl therefore DEFEATS de-indexing, and can
+# leave URLs listed title-only in search results from inbound links.
+#
+# Do NOT add "Disallow: /" here.
+
+User-agent: *
+Allow: /
+
+# No Sitemap directive by design.

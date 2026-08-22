@@ -16,10 +16,21 @@ Every page, template, and layout MUST carry all of the following:
    ```
    X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
    ```
+   This is configured in `vercel.json` as a headers rule matching `/(.*)`.
+   If a framework with a `public/` directory is adopted later, `robots.txt`
+   moves into it — `vercel.json` stays at the repo root either way.
 3. **robots.txt** — must ALLOW crawling. Do NOT use `Disallow: /`.
    A crawler that is blocked from fetching a page cannot read the `noindex`
    directive on it, and the URL can still be indexed title-only from inbound
    links. Blocking crawl actively defeats de-indexing.
+
+### Hosting
+
+Deployed on Vercel via the connected GitHub repository. Enforcement is by
+noindex directives only — no password protection — as chosen by the site
+owner. Note the tradeoff this accepts: the site is publicly reachable by
+anyone with the URL, and directives are voluntary, so scrapers and AI
+crawlers that ignore robots rules are not stopped.
 
 ### Also required
 
