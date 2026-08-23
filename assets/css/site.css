@@ -459,6 +459,8 @@ main{padding-left:0}
 }
 .doc__inset{
   position:absolute;right:-6%;bottom:-9%;width:46%;
+  /* in the flipped spread the portrait sits right of the copy, so the inset
+     tucks in on the copy side rather than hanging off the page edge */
   border:7px solid var(--navy);box-shadow:0 24px 60px -24px rgba(0,0,0,.7);
   display:none;
 }
@@ -467,6 +469,7 @@ main{padding-left:0}
 /* media sits right of the copy in the flipped spread, so mirror the portrait
    inward. Direct child only — the consult inset keeps its own orientation. */
 .doc--flip .doc__media > img{transform:scaleX(-1)}
+.doc--flip .doc__inset{left:-6%;right:auto}
 
 .doc__name{
   font-size:clamp(34px,4.4vw,68px);font-stretch:76%;letter-spacing:-.032em;line-height:.92;

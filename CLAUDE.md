@@ -52,3 +52,34 @@ curl -sI https://<host>/ | grep -i x-robots-tag
 curl -s  https://<host>/ | grep -i 'name="robots"'
 curl -s  https://<host>/robots.txt
 ```
+
+## Site structure
+
+`index.html` is hand-maintained. The interior pages are generated:
+
+```sh
+python3 tools/build_pages.py
+```
+
+The generator lifts the header, drawer, calibration spine and footer straight
+out of `index.html`, so the homepage is the single source of truth for site
+chrome — edit the header there and rebuild, rather than editing ten files. The
+shared FAQ is lifted from the homepage the same way. Page bodies live in
+`tools/page_content.py`; edit those, not the generated HTML, or your changes
+will be overwritten on the next build.
+
+Pages: `/`, `/about-us`, `/patient-information`, `/vasectomy-fees`,
+`/book-online`, `/location`, `/contact-us`, `/blog`, `/privacy-policy`,
+`/sitemap` (a human-readable index — not an XML sitemap, see above).
+
+`vercel.json` sets `cleanUrls` and `trailingSlash: false`, so pages are served
+at `/about-us` rather than `/about-us.html`. Reference assets from the root
+(`/assets/...`) in interior pages so paths hold at `/blog/` depth.
+
+## Known content gaps
+
+- `/cancellation-policy` is linked from the fees page and the homepage but does
+  not exist yet.
+- Some FAQ and fees copy refers to "Vasectomy Australia" — the parent practice —
+  rather than the Hobart Vasectomy Centre. Left as-is deliberately; confirm with
+  the owner which name should appear where.
