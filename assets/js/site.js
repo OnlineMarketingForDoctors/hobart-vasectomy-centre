@@ -188,33 +188,59 @@
     });
   });
 
-  /* ---------------------------------------------------------- rail ----- */
-  var rail = $('#rail');
-  if (rail) {
-    var down = false, startX = 0, startL = 0, moved = 0;
-    rail.addEventListener('pointerdown', function (e) {
-      if (e.pointerType === 'touch') return;
-      down = true; moved = 0;
-      startX = e.clientX; startL = rail.scrollLeft;
-      rail.classList.add('is-drag');
-      rail.setPointerCapture(e.pointerId);
+  /* -------------------------------------------------------- reviews ---- */
+  var scroller = $('#revScroll');
+
+  function wireReviews() {
+    $$('.rev').forEach(function (rev) {
+      var body = $('.rev__body', rev), btn = $('.rev__more', rev);
+      if (!body || !btn) return;
+      var collapsed = body.offsetHeight;
+
+      // only offer the control when there is actually more to read
+      if (body.scrollHeight <= collapsed + 4) { btn.hidden = true; return; }
+      btn.hidden = false;
+
+      btn.addEventListener('click', function () {
+        var open = rev.getAttribute('data-open') === 'true';
+        if (open) {
+          body.style.height = body.scrollHeight + 'px';   // fix the start value
+          requestAnimationFrame(function () { body.style.height = collapsed + 'px'; });
+          rev.setAttribute('data-open', 'false');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = 'Read more';
+        } else {
+          body.style.height = body.scrollHeight + 'px';
+          rev.setAttribute('data-open', 'true');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.textContent = 'Show less';
+        }
+      });
+
+      // once expanded, let the text reflow freely
+      body.addEventListener('transitionend', function (e) {
+        if (e.propertyName === 'height' && rev.getAttribute('data-open') === 'true') {
+          body.style.height = 'auto';
+        }
+      });
     });
-    rail.addEventListener('pointermove', function (e) {
-      if (!down) return;
-      var d = e.clientX - startX;
-      moved = Math.abs(d);
-      rail.scrollLeft = startL - d;
-    });
-    ['pointerup', 'pointercancel'].forEach(function (ev) {
-      rail.addEventListener(ev, function () { down = false; rail.classList.remove('is-drag'); });
-    });
-    rail.addEventListener('click', function (e) { if (moved > 6) e.preventDefault(); }, true);
-    rail.addEventListener('keydown', function (e) {
-      var card = $('.rev', rail);
-      var w = card ? card.offsetWidth + 24 : 400;
-      if (e.key === 'ArrowRight') { rail.scrollBy({ left: w, behavior: reduce ? 'auto' : 'smooth' }); e.preventDefault(); }
-      if (e.key === 'ArrowLeft')  { rail.scrollBy({ left: -w, behavior: reduce ? 'auto' : 'smooth' }); e.preventDefault(); }
-    });
+  }
+
+  // measure only once the webfonts are in, or the line count is wrong
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(wireReviews);
+  } else {
+    window.addEventListener('load', wireReviews);
+  }
+
+  if (scroller) {
+    var panel = scroller.parentElement;
+    var onRevScroll = function () {
+      var atEnd = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 24;
+      panel.classList.toggle('is-end', atEnd);
+    };
+    scroller.addEventListener('scroll', onRevScroll, { passive: true });
+    onRevScroll();
   }
 
   /* ------------------------------------------------------- listeners --- */
