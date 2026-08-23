@@ -787,7 +787,6 @@ def build(write, phero, cta, crumb, TICK, BOOK):
   <div class="phero__scrim"></div>
   <div class="wrap phero__in">
     ''' + crumb('Privacy policy') + '''
-    <p class="kicker kicker--dk">Privacy policy</p>
     <h1>How we handle <em>your</em> information.</h1>
     <p class="phero__lede">Vasectomy Australia is committed to managing your personal information in accordance with the Australian Privacy Principles. This explains what we collect, why, and who we share it with.</p>
   </div>
@@ -826,7 +825,6 @@ def build(write, phero, cta, crumb, TICK, BOOK):
   <div class="phero__scrim"></div>
   <div class="wrap phero__in">
     ''' + crumb('Sitemap') + '''
-    <p class="kicker kicker--dk">Sitemap</p>
     <h1>Every page, in <em>one</em> place.</h1>
   </div>
 </section>

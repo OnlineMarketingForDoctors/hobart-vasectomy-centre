@@ -96,7 +96,6 @@ def phero(img, alt, kicker, h1, lede, acts=True, spine=''):
   <div class="phero__scrim"></div>
   <div class="wrap phero__in">
     {crumb}
-    <p class="kicker kicker--dk">{kicker}</p>
     <h1>{h1}</h1>
     <p class="phero__lede">{lede}</p>
     {acts}
