@@ -295,8 +295,14 @@ main{padding-left:0}
 
 .hero__inner{
   grid-area:copy;position:relative;z-index:2;
-  padding:clamp(104px,13vh,150px) var(--gut) clamp(34px,6vh,64px);
+  /* stacked under the portraits on phones — the hero already clears the
+     masthead, so no room is reserved for it a second time here */
+  padding:clamp(26px,4.5vh,44px) var(--gut) clamp(30px,5vh,52px);
   display:flex;flex-direction:column;justify-content:center;
+}
+@media (min-width:1000px){
+  /* beside the portraits, where the copy must clear the fixed masthead */
+  .hero__inner{padding:clamp(104px,13vh,150px) var(--gut) clamp(34px,6vh,64px)}
 }
 .hero__eyebrow{
   font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
