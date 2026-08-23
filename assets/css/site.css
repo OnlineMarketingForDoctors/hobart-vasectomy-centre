@@ -152,13 +152,20 @@ main{padding-left:0}
   border-bottom-color:rgba(255,255,255,.10);
 }
 .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex:0 0 auto}
-.brand img{width:158px;height:auto}
+/* The mark is large while the page is at rest and gives back space once the
+   masthead condenses on scroll. Clamped so it never crowds the nav at the
+   width where the nav first appears. */
+.brand img{width:clamp(158px,17vw,237px);height:auto;transition:width .35s var(--ease)}
+.site-header.is-stuck .brand img{width:158px}
+
+@media (max-width:1099px){
+  .brand img,.site-header.is-stuck .brand img{width:clamp(190px,56vw,226px)}
+}
 @media (max-width:680px){
-  .brand img{width:174px}          /* half again as large as before */
   .site-header .btn{padding:11px 14px;font-size:10.5px;letter-spacing:.09em}
   .site-header__inner{gap:9px;padding-inline:16px}
 }
-@media (max-width:400px){.brand img{width:150px}}
+
 
 /* call button — phones only; desktop keeps the number in the footer and nav */
 .hdr-tel{
@@ -175,7 +182,7 @@ main{padding-left:0}
   .brand{margin-right:auto}
   .site-header .hdr-book{display:none;margin-left:0}
   .site-header.is-stuck .brand{display:none}
-  .site-header.is-stuck .hdr-book{display:inline-flex;margin-right:auto;animation:hdrIn .32s var(--ease-out) both}
+  .site-header.is-stuck .hdr-book{display:inline-flex;margin-left:0;margin-right:auto;animation:hdrIn .32s var(--ease-out) both}
   .hdr-tel{display:grid}
 }
 @keyframes hdrIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
@@ -278,6 +285,13 @@ main{padding-left:0}
 }
 .hero__fig figcaption b{display:block;font-weight:500;color:var(--yellow);margin-bottom:3px}
 @keyframes heroIn{to{opacity:1;transform:scale(-1,1)}}
+@keyframes heroInPlain{to{opacity:1;transform:scale(1)}}
+@media (max-width:999px){
+  .hero__fig:first-child img{transform:scale(1.05);animation-name:heroInPlain}
+}
+@media (max-width:999px) and (prefers-reduced-motion:reduce){
+  .hero__fig:first-child img{transform:none}
+}
 
 .hero__inner{
   grid-area:copy;position:relative;z-index:2;
@@ -308,12 +322,11 @@ main{padding-left:0}
 
 .gbadge{
   display:inline-flex;align-items:center;gap:11px;align-self:flex-start;
-  margin-top:clamp(20px,2.8vh,30px);padding:10px 15px 10px 12px;
-  border:1px solid var(--rule-dk);border-radius:2px;text-decoration:none;
-  background:rgba(246,248,250,.035);
-  transition:border-color .28s var(--ease),background .28s var(--ease),transform .28s var(--ease);
+  margin-top:clamp(22px,3vh,32px);text-decoration:none;
+  transition:opacity .28s var(--ease);
 }
-.gbadge:hover{border-color:rgba(246,248,250,.34);background:rgba(246,248,250,.07);transform:translateY(-1px)}
+.gbadge:hover{opacity:.82}
+.gbadge:focus-visible{outline-offset:6px}
 .gbadge__g{
   width:26px;height:26px;border-radius:50%;background:var(--paper);
   display:grid;place-content:center;flex:0 0 auto;
@@ -521,9 +534,12 @@ main{padding-left:0}
 .proc{background:var(--paper)}
 .proc__grid{display:grid;gap:clamp(36px,4.5vw,76px);align-items:start}
 @media (min-width:1000px){
-  .proc__grid{grid-template-columns:1.02fr .98fr}
-  /* the video stays put while the sequence scrolls past it */
-  .proc__left{position:sticky;top:clamp(96px,13vh,140px)}
+  .proc__grid{grid-template-columns:.98fr 1.02fr}
+  /* Sequence reads down the left, the video holds beside it on the right.
+     DOM order keeps the heading before its steps for assistive tech; only
+     the visual order swaps. */
+  .proc__seq{order:1}
+  .proc__intro{order:2;position:sticky;top:clamp(96px,13vh,140px)}
 }
 .proc__video{position:relative;background:var(--navy);overflow:hidden;margin-top:clamp(26px,3vw,38px)}
 .proc__video video{width:100%;aspect-ratio:16/10;object-fit:cover;display:block}
@@ -833,6 +849,26 @@ main{padding-left:0}
   display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--dk-faint);
 }
+
+/* ------------------------------------------------------------ to top --- */
+/* Utility, not a call to action — it stays quiet so it never competes with
+   the booking button, and only appears once there is something to go back to. */
+.totop{
+  position:fixed;z-index:65;
+  right:clamp(14px,2.4vw,30px);bottom:clamp(14px,2.4vw,30px);
+  width:46px;height:46px;border-radius:50%;
+  display:grid;place-content:center;
+  color:var(--paper);background:rgba(14,28,46,.82);
+  border:1px solid rgba(246,248,250,.26);
+  backdrop-filter:saturate(140%) blur(8px);
+  opacity:0;visibility:hidden;transform:translateY(10px);
+  transition:opacity .3s var(--ease),transform .3s var(--ease),
+             visibility .3s var(--ease),color .25s,border-color .25s,background .25s;
+}
+.totop.is-on{opacity:1;visibility:visible;transform:none}
+.totop svg{width:19px;height:19px;display:block}
+.totop:hover{color:var(--yellow);border-color:var(--yellow);background:rgba(14,28,46,.95)}
+@media (max-width:680px){.totop{width:42px;height:42px}}
 
 /* -------------------------------------------------------------- reveal -- */
 [data-rev]{

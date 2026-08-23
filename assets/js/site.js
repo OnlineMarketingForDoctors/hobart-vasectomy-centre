@@ -9,8 +9,18 @@
 
   /* ---------------------------------------------------------- header --- */
   var header = $('#siteHeader');
+  var toTop = $('#toTop');
   function onScrollHeader() {
     header.classList.toggle('is-stuck', window.scrollY > 40);
+    if (toTop) toTop.classList.toggle('is-on', window.scrollY > window.innerHeight * 0.8);
+  }
+  if (toTop) {
+    toTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      // send focus somewhere sensible rather than leaving it on a hidden control
+      var brand = $('.brand');
+      if (brand) { brand.setAttribute('tabindex', '-1'); brand.focus({ preventScroll: true }); }
+    });
   }
   // publish the real masthead height so the hero can clear it on phones
   function measureHeader() {
