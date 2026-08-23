@@ -12,7 +12,13 @@
   function onScrollHeader() {
     header.classList.toggle('is-stuck', window.scrollY > 40);
   }
+  // publish the real masthead height so the hero can clear it on phones
+  function measureHeader() {
+    document.documentElement.style.setProperty('--hdr-h', header.offsetHeight + 'px');
+  }
   onScrollHeader();
+  measureHeader();
+  window.addEventListener('load', measureHeader);
 
   /* ---------------------------------------------------------- drawer --- */
   var burger = $('#burger'), drawer = $('#drawer');
@@ -154,13 +160,17 @@
     }
     scaleTicks.appendChild(f);
   }
-  if (scaleSec && 'IntersectionObserver' in window) {
+  // sections whose bars/rules draw themselves once they come into view
+  var drawSecs = [scaleSec, $('.revs')].filter(Boolean);
+  if ('IntersectionObserver' in window) {
     var xo = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { scaleSec.classList.add('is-in'); xo.unobserve(en.target); }
+        if (en.isIntersecting) { en.target.classList.add('is-in'); xo.unobserve(en.target); }
       });
-    }, { threshold: 0.25 });
-    xo.observe(scaleSec);
+    }, { threshold: 0.2 });
+    drawSecs.forEach(function (el) { xo.observe(el); });
+  } else {
+    drawSecs.forEach(function (el) { el.classList.add('is-in'); });
   }
 
   /* ----------------------------------------------------------- faq ----- */
@@ -235,12 +245,104 @@
 
   if (scroller) {
     var panel = scroller.parentElement;
+
     var onRevScroll = function () {
       var atEnd = scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 24;
       panel.classList.toggle('is-end', atEnd);
     };
     scroller.addEventListener('scroll', onRevScroll, { passive: true });
     onRevScroll();
+
+    /* Ambient autoscroll: a slow drift that signals there is more to read.
+       It yields to the reader — any hover, focus, or manual scroll stops it,
+       and it resumes only after they have been idle for a moment. */
+    if (!reduce) {
+      var SPEED = 16;        // px per second
+      var IDLE = 4000;       // ms of stillness before drifting again
+      var running = false, visible = false, held = false;
+      var raf = null, last = 0, expected = 0, idleTimer = null, rewinding = false;
+
+      function maxScroll() { return scroller.scrollHeight - scroller.clientHeight; }
+
+      function frame(ts) {
+        if (!running) return;
+        if (!last) last = ts;
+        var dt = Math.min((ts - last) / 1000, 0.05);
+        last = ts;
+
+        if (!rewinding) {
+          var max = maxScroll();
+          if (max <= 0) { raf = requestAnimationFrame(frame); return; }
+          expected = Math.min(expected + SPEED * dt, max);
+          scroller.scrollTop = expected;
+          if (expected >= max - 0.5) rewind();
+        }
+        raf = requestAnimationFrame(frame);
+      }
+
+      function rewind() {
+        rewinding = true;
+        var from = scroller.scrollTop, t0 = null;
+        setTimeout(function () {
+          function back(ts) {
+            if (!running) { rewinding = false; return; }
+            if (t0 === null) t0 = ts;
+            var p = Math.min((ts - t0) / 900, 1);
+            var eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+            expected = from * (1 - eased);
+            scroller.scrollTop = expected;
+            if (p < 1) requestAnimationFrame(back);
+            else { expected = 0; rewinding = false; }
+          }
+          requestAnimationFrame(back);
+        }, 1400);
+      }
+
+      function start() {
+        if (running || held || !visible) return;
+        running = true; last = 0; expected = scroller.scrollTop;
+        raf = requestAnimationFrame(frame);
+      }
+      function stop() {
+        running = false; rewinding = false;
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+      }
+      function holdThenResume() {
+        held = true; stop();
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(function () { held = false; start(); }, IDLE);
+      }
+
+      // a reader taking over always wins
+      scroller.addEventListener('scroll', function () {
+        if (running && !rewinding && Math.abs(scroller.scrollTop - expected) > 2) holdThenResume();
+      }, { passive: true });
+      ['wheel', 'touchstart', 'keydown'].forEach(function (ev) {
+        scroller.addEventListener(ev, holdThenResume, { passive: true });
+      });
+      panel.addEventListener('pointerenter', function () { held = true; stop(); clearTimeout(idleTimer); });
+      panel.addEventListener('pointerleave', function () { held = false; clearTimeout(idleTimer); start(); });
+      panel.addEventListener('focusin', function () { held = true; stop(); clearTimeout(idleTimer); });
+      panel.addEventListener('focusout', function (e) {
+        if (!panel.contains(e.relatedTarget)) { held = false; start(); }
+      });
+      $$('.rev__more').forEach(function (btn) { btn.addEventListener('click', holdThenResume); });
+
+      // only drift while the section is actually on screen
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            visible = en.isIntersecting;
+            if (visible) start(); else stop();
+          });
+        }, { threshold: 0.25 }).observe(panel);
+      } else {
+        visible = true; start();
+      }
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stop(); else start();
+      });
+    }
   }
 
   /* ------------------------------------------------------- listeners --- */
@@ -253,7 +355,7 @@
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', function () { buildTicks(); onScrollSpine(); });
+  window.addEventListener('resize', function () { buildTicks(); measureHeader(); onScrollSpine(); });
 
   buildTicks();
   onScrollSpine();
