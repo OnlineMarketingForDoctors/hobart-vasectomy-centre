@@ -9,7 +9,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
         'Dr Geoff Cashion presenting at a vasectomy conference',
         'About us',
         'Two specialists. <em>One</em> procedure.',
-        'Dr Geoff Cashion and Dr Matt Valentine have performed more than 32,000 '
+        'Dr Geoff Cashion and Dr Matt Valentine have performed more than 50,000 '
         'vasectomies between them. It is not a sideline to a general practice &mdash; '
         'it is the whole practice.'
     ) + '''
@@ -24,7 +24,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
         <p>Most men having a vasectomy are seen by a doctor who performs a handful each year. Both of ours perform them every clinic, every week. That repetition is not a marketing line &mdash; it is the mechanism behind short procedure times, low complication rates and the calm that patients notice on the table.</p>
         <p>Both trained in the no-scalpel technique in the United States. Both work exclusively in vasectomy through Vasectomy Australia, the country's largest provider of the procedure.</p>
         <div class="statrow">
-          <div><b data-count="32000" data-suffix="+">32,000+</b><span>Combined procedures</span></div>
+          <div><b data-count="50000" data-suffix="+">50,000+</b><span>Combined procedures</span></div>
           <div><b data-count="4000" data-suffix="+">4,000+</b><span>A year, Dr Cashion</span></div>
           <div><b data-count="250" data-suffix="+">250+</b><span>A month, Dr Valentine</span></div>
         </div>
@@ -48,7 +48,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
           <p>He is a Fellow of the Australian College of Rural and Remote Medicine and of the Royal College of Emergency Medicine, and teaches general practice registrars as a GP Supervisor with James Cook University. Outside medicine he is a recording artist with two albums and a national tour behind him.</p>
         </div>
         <div class="statrow statrow--dk" data-rev data-rev-d="3">
-          <div><b>15,000+</b><span>Performed to date</span></div>
+          <div><b>25,000+</b><span>Performed to date</span></div>
           <div><b>FACRRM</b><span>Rural &amp; remote medicine</span></div>
           <div><b>FRCEM</b><span>Emergency medicine</span></div>
         </div>
@@ -99,10 +99,10 @@ def build(write, phero, cta, crumb, TICK, BOOK):
         <h2 class="h2" data-rev data-rev-d="1">Dr Matt<br>Valentine</h2>
         <div class="prose" data-rev data-rev-d="2" style="margin-top:24px">
           <p>In 2016 Matt travelled to the United States to train in the no-scalpel technique, adding it to an established general practice skill set. He set out to offer a procedure that was both secure and efficient, with as little downtime for the patient as possible.</p>
-          <p>He is now one of Australia's foremost vasectomists, having performed more than 17,000 procedures &mdash; currently over 250 every month. He is known among referring GPs for turning urgent cases around quickly, usually within a fortnight, and makes himself available to referring doctors for advice at any time.</p>
+          <p>He is now one of Australia's foremost vasectomists, having performed more than 25,000 procedures &mdash; currently over 250 every month. He is known among referring GPs for turning urgent cases around quickly, usually within a fortnight, and makes himself available to referring doctors for advice at any time.</p>
         </div>
         <div class="statrow" data-rev data-rev-d="3">
-          <div><b>17,000+</b><span>Performed to date</span></div>
+          <div><b>25,000+</b><span>Performed to date</span></div>
           <div><b>250+</b><span>Every month</span></div>
           <div><b>2016</b><span>US-trained since</span></div>
         </div>
@@ -130,7 +130,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
 
     write('about-us.html',
           'About Us | Hobart Vasectomy Centre',
-          "Dr Geoff Cashion and Dr Matt Valentine have performed more than 32,000 vasectomies between them.",
+          "Dr Geoff Cashion and Dr Matt Valentine have performed more than 50,000 vasectomies between them.",
           about)
 
     # ============================================ PATIENT INFORMATION ====
@@ -698,7 +698,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
         ('ditch-the-condoms', 'Ditch the condoms for good',
          '<p>Let\'s be honest &mdash; condoms get old fast. They are inconvenient, they are a recurring cost, and they are not foolproof. A vasectomy lets you stop buying them permanently. After your procedure and the follow-up test that confirms you are clear, that is simply no longer something you think about.</p>'),
         ('expertise-in-hobart', 'World-class expertise, in Hobart',
-         '<p>With vasectomy, experience is the variable that matters most. Dr Geoff Cashion, founder of Vasectomy Australia, performs more no-scalpel vasectomies each year than any other doctor in Australia, with more than 15,000 procedures behind him. Dr Matt Valentine has performed over 17,000.</p><p>That is not local expertise being described generously. It is two of the most practised pairs of hands in the country, running clinics ten minutes from the Hobart CBD.</p>'),
+         '<p>With vasectomy, experience is the variable that matters most. Dr Geoff Cashion, founder of Vasectomy Australia, performs more no-scalpel vasectomies each year than any other doctor in Australia, with more than 25,000 procedures behind him &mdash; and Dr Matt Valentine has performed just as many.</p><p>That is not local expertise being described generously. It is two of the most practised pairs of hands in the country, running clinics ten minutes from the Hobart CBD.</p>'),
         ('making-the-switch', 'Why Hobart men are making the switch',
          '<p>Hobart in 2025 is about practical choices, and vasectomy fits neatly. Whether you are a dad with a full house or a partner ready to take your turn carrying the contraception, it ticks the boxes: quick, affordable, permanent, and done with by lunchtime.</p><p>It is fifteen minutes, and then you stop thinking about it.</p>'),
     ]
@@ -808,7 +808,7 @@ def build(write, phero, cta, crumb, TICK, BOOK):
 
     # ========================================================== SITEMAP ====
     links = [
-        ('/', 'Home', 'Two vasectomists, 32,000 procedures, $597 out of pocket.'),
+        ('/', 'Home', 'Two vasectomists, 50,000 procedures, $597 out of pocket.'),
         ('/about-us', 'About us', 'Dr Geoff Cashion and Dr Matt Valentine.'),
         ('/patient-information', 'Patient information', 'What happens before, during and after.'),
         ('/vasectomy-fees', 'Vasectomy fees', '$597 out of pocket, and how the Medicare rebate works.'),
