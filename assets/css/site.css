@@ -627,11 +627,17 @@ main{padding-left:0}
 }
 .rating__s{display:block;color:var(--yellow);font-size:15px;letter-spacing:2.5px;margin-top:7px}
 .rating__c{
-  margin:0 0 0 auto;text-align:right;
-  font-family:var(--mono);font-size:10.5px;line-height:1.65;letter-spacing:.11em;
+  margin:0 0 0 auto;text-align:right;display:flex;align-items:baseline;gap:8px;
+  font-family:var(--mono);font-size:10.5px;line-height:1.5;letter-spacing:.11em;
   text-transform:uppercase;color:var(--dk-faint);
 }
-.rating__c b{color:var(--paper);font-weight:500;font-size:13px}
+/* the review count is the second real number here — give it the weight of one */
+.rating__c b{
+  font-family:var(--display);font-weight:800;font-stretch:88%;
+  font-size:clamp(20px,1.9vw,26px);letter-spacing:-.02em;line-height:1;
+  color:var(--paper);font-variant-numeric:tabular-nums;
+}
+.rating__c span{display:block;max-width:9ch;text-align:left}
 
 /* Single-series magnitude: one hue on a recessive track, direct-labelled by
    star value. No legend — one series, named by the label beside it. */
